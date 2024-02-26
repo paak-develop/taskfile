@@ -1,0 +1,36 @@
+version: '3'
+
+# example usage
+#includes:
+#  back:
+#    taskfile: https://raw.githubusercontent.com/paak-develop/taskfile/main/taskfile.docker.yml
+#    vars:
+#      DOCKERFILE_PATH: ./backend/Dockerfile
+#      IMAGE: backend_image
+#      AWS_ACCOUNT: 000011112222
+#      REGION: us-east-1
+#      tag: backend
+
+tasks:
+  build:
+    desc: build image; e.g. $ env=(dev|stg|prod) task {alias}:build
+    cmds:
+      - docker build -t {{.IMAGE}}:latest -f {{.DOCKERFILE_PATH}} .
+
+  build-amd64:
+    desc: build image; e.g. $ env=(dev|stg|prod) task {alias}:build-amd64
+    cmds:
+      - docker buildx build --platform linux/amd64 -t {{.IMAGE}}:latest -f {{.DOCKERFILE_PATH}} .
+
+  build-arm64:
+    desc: build image; e.g. $ env=(dev|stg|prod) task {alias}:build-arm64
+    cmds:
+      - docker buildx build --platform linux/arm64 -t {{.IMAGE}}:latest -f {{.DOCKERFILE_PATH}} .
+
+  push:
+    desc: push image to ecr; e.g. $ env=(dev|stg|prod) task {alias}:push
+    cmds:
+      - echo {{.IMAGE}}:latest
+      - echo {{.AWS_ACCOUNT}}.dkr.ecr.{{.REGION}}.amazonaws.com/{{.IMAGE}}:{{.tag}}
+      - docker tag {{.IMAGE}}:latest {{.AWS_ACCOUNT}}.dkr.ecr.{{.REGION}}.amazonaws.com/{{.IMAGE}}:{{.tag}}
+      - docker push {{.AWS_ACCOUNT}}.dkr.ecr.{{.REGION}}.amazonaws.com/{{.IMAGE}}:{{.tag}}

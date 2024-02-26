@@ -1,0 +1,23 @@
+version: '3'
+
+# example usage
+#includes:
+#  {some-execution-name}:
+#    taskfile: https://raw.githubusercontent.com/paak-develop/taskfile/main/taskfile.ecs-exec.yml
+#    vars:
+#      ECS_CLUSTER_NAME: cluster-name
+#      ECS_FIRST_TASK_ARN: arn:aws:ecs:**
+#      CONTAINER: container-name
+#      COMMAND: backend
+
+tasks:
+  exec:
+    desc: execute commands on ECS; e.g. $ env=(dev|stg|prod) task {alias}:exec
+    cmds:
+      - |
+        aws ecs execute-command \
+        --cluster {{.ECS_CLUSTER_NAME}} \
+        --task {{.ECS_FIRST_TASK}} \
+        --container {{.CONTAINER}} \
+        --interactive \
+        --command "{{.COMMAND}}"
