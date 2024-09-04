@@ -20,11 +20,15 @@ tasks:
     cmds:
       - echo {{.IMAGE}}:latest
       - docker buildx build --target {{.TARGET}} --platform {{.PLATFORM}} -t {{.IMAGE}}:latest -f {{.DOCKERFILE_PATH}} .
+    silent: true
+    prefix: ' 🐳 < building '
 
   push:
     desc: push image to ecr; e.g. $ env=(dev|stg|prod) task {alias}:push
     cmds:
-      - echo {{.IMAGE}}:latest
-      - echo {{.AWS_ACCOUNT}}.dkr.ecr.{{.REGION}}.amazonaws.com/{{.IMAGE}}:{{.tag}}
+      - echo "FROM {{.IMAGE}}:latest"
+      - echo "TO {{.AWS_ACCOUNT}}.dkr.ecr.{{.REGION}}.amazonaws.com/{{.IMAGE}}:{{.tag}}"
       - docker tag {{.IMAGE}}:latest {{.AWS_ACCOUNT}}.dkr.ecr.{{.REGION}}.amazonaws.com/{{.IMAGE}}:{{.tag}}
       - docker push {{.AWS_ACCOUNT}}.dkr.ecr.{{.REGION}}.amazonaws.com/{{.IMAGE}}:{{.tag}}
+    silent: true
+    prefix: ' 🐳 < pushing '
