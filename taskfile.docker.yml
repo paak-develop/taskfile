@@ -13,13 +13,14 @@ version: '3'
 #      tag: backend
 #      TARGET: runner
 #      PLATFORM: `linux/amd64` for intel or `linux/arm64` for arm(Apple Silicon)
+#      CONTEXT: building context, default "."
 
 tasks:
   build:
     desc: build image; e.g. $ env=(dev|stg|prod) task {alias}:build
     cmds:
       - echo {{.IMAGE}}:latest
-      - docker buildx build --target {{.TARGET}} --platform {{.PLATFORM}} -t {{.IMAGE}}:latest -f {{.DOCKERFILE_PATH}} .
+      - docker buildx build --target {{.TARGET}} --platform {{.PLATFORM}} -t {{.IMAGE}}:latest -f {{.DOCKERFILE_PATH}} {{.CONTEXT | default "."}}
     silent: true
     prefix: ' 🐳 < building '
 
