@@ -7,25 +7,19 @@ version: '3'
 #    vars:
 #      DOCKERFILE_PATH: ./backend/Dockerfile
 #      IMAGE: backend_image
+#      CONTAINER: backend_container
 #      AWS_ACCOUNT: 000011112222
 #      REGION: us-east-1
 #      tag: backend
+#      TARGET: runner
+#      PLATFORM: `linux/amd64` for intel or `linux/arm64` for arm(Apple Silicon)
 
 tasks:
   build:
     desc: build image; e.g. $ env=(dev|stg|prod) task {alias}:build
     cmds:
-      - docker build -t {{.IMAGE}}:latest -f {{.DOCKERFILE_PATH}} .
-
-  build-amd64:
-    desc: build image; e.g. $ env=(dev|stg|prod) task {alias}:build-amd64
-    cmds:
-      - docker buildx build --platform linux/amd64 -t {{.IMAGE}}:latest -f {{.DOCKERFILE_PATH}} .
-
-  build-arm64:
-    desc: build image; e.g. $ env=(dev|stg|prod) task {alias}:build-arm64
-    cmds:
-      - docker buildx build --platform linux/arm64 -t {{.IMAGE}}:latest -f {{.DOCKERFILE_PATH}} .
+      - echo {{.IMAGE}}:latest
+      - docker buildx build --target {{.TARGET}} --platform {{.PLATFORM}} -t {{.IMAGE}}:latest -f {{.DOCKERFILE_PATH}} .
 
   push:
     desc: push image to ecr; e.g. $ env=(dev|stg|prod) task {alias}:push
