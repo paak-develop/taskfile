@@ -14,6 +14,7 @@ tasks:
   exec:
     desc: execute commands on ECS; e.g. $ env=(dev|stg|prod) task {alias}:exec
     cmds:
+      - echo "{{.COMMAND}}"
       - |
         aws ecs execute-command \
         --cluster {{.ECS_CLUSTER_NAME}} \
@@ -21,3 +22,5 @@ tasks:
         --container {{.CONTAINER}} \
         --interactive \
         --command "{{.COMMAND}}"
+    silent: true
+    prefix: ' 👨‍💻 < executing '

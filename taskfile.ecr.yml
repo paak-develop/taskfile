@@ -1,0 +1,20 @@
+version: '3'
+
+#includes:
+#  back:
+#    taskfile: https://raw.githubusercontent.com/paak-develop/taskfile/main/taskfile.docker.yml
+#    vars:
+#      AWS_ACCOUNT: 000011112222
+#      REGION: us-east-1
+
+
+tasks:
+  login:
+    desc: login to ECR
+    cmds:
+      - aws ecr get-login-password --region {{.REGION}} | docker login --username AWS --password-stdin {{.AWS_ACCOUNT}}.dkr.ecr.{{.REGION}}.amazonaws.com
+
+  logout:
+    desc: logout from ECR
+    cmds:
+      - docker logout public.ecr.aws

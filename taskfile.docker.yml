@@ -27,7 +27,7 @@ tasks:
   push:
     desc: push image to ecr; e.g. $ env=(dev|stg|prod) task {alias}:push
     cmds:
-      - echo "FROM {{.IMAGE}}:latest"
+      - echo "FROM {{.IMAGE}}:{{.tag}}"
       - echo "TO {{.AWS_ACCOUNT}}.dkr.ecr.{{.REGION}}.amazonaws.com/{{.IMAGE}}:{{.tag}}"
       - docker tag {{.IMAGE}}:latest {{.AWS_ACCOUNT}}.dkr.ecr.{{.REGION}}.amazonaws.com/{{.IMAGE}}:{{.tag}}
       - docker push {{.AWS_ACCOUNT}}.dkr.ecr.{{.REGION}}.amazonaws.com/{{.IMAGE}}:{{.tag}}
